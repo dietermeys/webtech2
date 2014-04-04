@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Animationn2</title>
+</head>
+	<style>
+	body{
+		background-color: #191970;
+	}
+.flipInY
+{
+ -webkit-transform-origin: center center;
+ -webkit-animation: flipInY 1s;
+ -webkit-animation-fill-mode: forwards;
+}
+@-webkit-keyframes flipInY
+{
+ 0% { -webkit-transform: perspective(400px) rotateX( 90deg ); opacity: 0; }
+ 40% { -webkit-transform: perspective(400px) rotateX( -10deg ); }
+ 70% { -webkit-transform: perspective(400px) rotateX( 10deg ); }
+ 100% { -webkit-transform: perspective(400px) rotateX( 0deg ); opacity: 1; }
+}
+.tekst{
+-webkit-transform-origin: left bottom;
+ -webkit-animation: tekst 1s;
+ -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes tekst
+{
+ 0% { -webkit-transform: translateX(-200px); }
+ 40% { -webkit-transform: ; }
+ 70% { -webkit-transform: ; }
+ 100% { -webkit-transform: translateX(50px);  }
+}
+.flipInY2
+{
+ -webkit-transform-origin: left bottom;
+ -webkit-animation: flipInY2 1s;
+ -webkit-animation-fill-mode: forwards;
+}
+@-webkit-keyframes flipInY2
+{
+ 0% { -webkit-transform: perspective(400px) rotateY( 90deg ); opacity: 0; }
+ 40% { -webkit-transform: perspective(400px) rotateY( -10deg ); }
+ 70% { -webkit-transform: perspective(400px) rotateY( 10deg ); }
+ 100% { -webkit-transform: perspective(400px) rotateY( 0deg ); opacity: 1; }
+}
+#element{
+	overflow: hidden;
+	background-color: white;
+	width: 650px;
+	height: 100px;
+	border-radius: 15px;
+	margin: auto;
+}
+#element2{
+	width: 650px;
+	height: 100px;
+	border-radius: 15px;
+	margin: auto;
+}
+#wrapper{
+	height: 650px;
+	width: 1000px;
+	margin: auto;
+}
+p{
+font-size: 20px;
+margin-top: -20px;
+}
+#fotokl{
+	height: 70px;
+	width: 70px;
+	float: left;
+	padding-top: 15px;
+	padding-right: 25px;
+}
+.fotogr{
+transition: -webkit-transform 0.5s;
+border-radius: 20px;
+margin-right: 10px;
+}
+.fotogr:hover{
+	 -webkit-transform: scale(1.1);
+}
+</style>
+<body>
+	<div id="wrapper">
+	<div id="element" class="flipInY">
+		<img src="imd.png" alt="" class="tekst" id="fotokl">
+		<h1 class="tekst">Welcome to the IMD workshop</h1>
+		<p class="tekst">Please select a user below</p>
+	</div>
+<br /><br />
+	<div id="element2" class="flipInY2">
+		<a href=""><img src="mattias.png" alt="" class="fotogr"></a>
+		<a href=""><img src="dieter.png" alt="" class="fotogr"></a>
+		<a href=""><img src="christop.png" alt="" class="fotogr"></a>
+	</div></div>
+</body>
+</html>

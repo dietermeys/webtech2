@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN"
+"http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Weather App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="reset.css" />
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+</head>
+<body onLoad="getLocation()">
+<div id="scherm">
+  <div id="troll">
+  <h1 id="demo"></h1>
+  <img src="" alt="" id="img">
+</div>
+  <h2 id="demo2"></h2>
+  <div id="lijn"></div>
+
+  <div id="links">
+    <img src="images/png/wind-icon.png" id="wind" alt="">
+    <h2 id="vochtig"></h2>
+  <div id="verticaal"></div>
+  </div>
+
+  <div id="rechts">
+  <h3 id="min"></h3><br />
+  <h3 id="max"></h3>
+  </div>
+
+  <div id="morge">
+    <h3>TOMORROW</h3><br />
+    <h3 id="minM"></h3><br />
+    <h3 id="maxM"></h3>
+  </div>
+</div>
+
+	<script>
+
+//geolocation bebalen
+var x=document.getElementById("demo");
+var y=document.getElementById("demo2");
+var img=document.getElementById("img");
+var vochtig=document.getElementById("vochtig");
+var q=document.getElementById("min");
+var m=document.getElementById("max");
+var minM=document.getElementById("minM");
+var maxM=document.getElementById("maxM");
+function getLocation()
+  {
+  if (navigator.geolocation)
+    {
+    navigator.geolocation.getCurrentPosition(showPosition);
+    }
+  else{x.innerHTML="Geolocation is not supported by this browser.";}
+  }
+function showPosition(position)
+  {
+  $.ajax({
+  url: "https://api.forecast.io/forecast/706203dec1e7bbf5c8c8b47b73a22038/" + position.coords.latitude + "," + position.coords.longitude,
+  dataType: "jsonp",
+
+  success: function (data) {
+    var tempInF = Math.round((data.currently.temperature - 32)/1.8);
+  	x.innerHTML=tempInF + "°C" ;//" / " + data.currently.temperature + "°F" ;
+  	y.innerHTML=data.currently.summary;
+  	  console.log(data);
+ 
+
+    vochtig.innerHTML= Math.round(data.currently.windSpeed*1.609344) + "km/u";
+    q.innerHTML="Min " + Math.round((data.daily.data[0].temperatureMin - 32)/1.8)+ " &degC ";
+    m.innerHTML="Max " + Math.round((data.daily.data[0].temperatureMax - 32)/1.8)+ " &degC";
+    minM.innerHTML="Min " + Math.round((data.daily.data[1].temperatureMin - 32)/1.8)+ " &degC ";
+    maxM.innerHTML="Max " + Math.round((data.daily.data[1].temperatureMax - 32)/1.8)+ " &degC";
+  
+var temp = data.currently.icon;
+if(temp == "partly-cloudy-day"){
+
+  img.src="images/png/28.png";
+}
+else if(temp == "partly-cloudy-night"){
+    img.src="images/png/27.png";
+}
+else if(temp == "cloudy"){
+  img.src="images/png/26.png";
+}
+else if(temp == "clear-day"){
+  img.src="images/png/32.png";
+}
+else if(temp == "wind"){
+  img.src="images/png/23.png";
+}
+else if(temp == "clear-night"){
+  img.src="images/png/31.png";
+}
+else if(temp == "partly-cloudy-night"){
+  img.src="images/png/33.png";
+}
+else if(temp == "snow" || temp == "sleet"){
+  img.src="images/png/16.png";
+}
+
+if(temp == "clear-day"){
+   document.body.style.background = "#f39c12";
+}
+else if(temp == "clear-night" || temp == "partly-cloudy-night" ){
+
+  document.body.style.background = "#34495e";
+
+}
+else{
+  document.body.style.background = "#3498db";
+}
+//clear-night , rain , snow , sleet , wind , fog , hail , thunderstorm
+//wind speed miles per hour
+//huminidity schaal van 0 - 1
+
+}});
+ }
+ </script>
+<style>
+		body{
+  font-weight: bold;
+	}
+    #scherm{
+    margin: auto;
+    width: 300px;
+    height: 500px;
+    color: white;
+    padding: 10px;
+    border: 1px solid white;
+  }
+  #rechts{
+    width: 150px;
+    height: 55px;
+    float: right;
+  }
+  #links{
+    width: 150px;
+    height: 55px;
+    float: left;
+  }
+  #morge{
+    width: 100%;
+    float: left;
+    text-align: center;
+  }
+  #troll{
+    margin-left: auto;
+    margin-right: auto;
+    width: 250px;
+  }
+  #tekst{
+    height: 30px;
+  }
+  #lijn{
+    border-bottom: 1px solid white;
+  }
+  #verticaal{
+    height: 50px;
+    border-left: 1px solid white;
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+  }
+  #demo{
+    float: left;
+    padding-top: 30px;
+    padding-right: 10px;
+  }
+  #demo2{
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  #wind{
+    float:left;
+    margin-top: 10px;
+  }
+  #vochtig{
+    margin-left: 5px;
+    float: left;
+    margin-top: 10px;
+  }
+  h1{
+    font-size: 50px;
+    margin-top: 15px;
+  }
+  h2{
+    font-size: 30px;
+  }
+
+  #minmax{
+    margin-top: 79px;
+  }
+  #rechts h3 {
+    float: left;
+    font-size: 20px;
+    padding-top: 5px;
+  }
+    #morge h3 {
+    font-size: 20px;
+    padding-top: 5px;
+  }
+</style>
+
+
+</body>
+</html>

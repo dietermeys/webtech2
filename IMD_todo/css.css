@@ -1,0 +1,60 @@
+body
+{
+    color: white;
+    background-color: #16a085;
+}
+
+#wrapper
+{
+    width: 500px;
+    height: 40px;
+    margin: 0 auto;
+}
+
+h1
+{
+    text-align: center;
+    color: white;
+}
+
+ul
+{
+    padding-left: 0px;
+}
+
+li
+{
+    list-style-type: none;
+    background-color: #f1c40f;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    margin-bottom: 3px;
+    border-radius: 15px;
+}
+
+.zeer_belangrijk
+{
+    background-color: #d34747;
+}
+
+.belangrijk
+{
+    background-color:#d35400;    
+}
+
+.minder_belangrijk
+{
+    background-color: #f39c12;
+}
+
+.todo
+{
+    background-color: #3498db;
+}
+
+.done
+{
+    text-decoration: line-through;
+    background-color: #2ecc71;
+}
