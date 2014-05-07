@@ -2,15 +2,42 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Ask</title>
+	<!--<link rel="stylesheet" type="text/css" href="reset.css">
+	<link rel="stylesheet" type="text/css" href="css.css"> -->
+	<title>IMDWall</title>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<style>
+	#questions{
+		height: 500px;
+	}
+	</style>
 </head>
 <body>
-	<h1>Welkom op de IMDwall question board</h1>
-	<form action="" method="post">
-		<label>Wat is uw vraag?</label>
-		<input type="text">
+	<div id="questions"></div>
+
+	<form id="send-question">
+		<input type="text" size="35" id="question">
+		<input type="submit" value="ask"></input>
 	</form>
+
+	<script>
+	jQuery(function($){
+		var socket = io.connect();
+		var $messageForm = $('#send-question');
+		var $messageBox = $('#question');
+		var $ask = $('#questions');
+
+		$messageForm.submit(function(e){
+			e.preventDefault();
+			socket.emit('send message', $messageBox.val());
+			$messageBox.val('');
+		});
+
+		socket.on('new message', function(data){
+			$ask.append(data + "<br />");
+		});
+	});
+	</script>
 </body>
 </html>
