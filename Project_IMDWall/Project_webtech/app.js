@@ -1,10 +1,9 @@
-var port = 2014;
-var app = require('express')();
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
-//var mysql = require('mysql');
-console.log('Listening on port ' + port);
-server.listen(port);
+var express = require('express'),
+	app = express(),
+	server = require('http').createServer(app),
+	io = require('socket.io').listen(server);
+
+server.listen(3000);
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/ask.html');
@@ -18,21 +17,11 @@ app.get('/wall.html', function (req, res) {
 app.get('/moderate.html', function (req, res) {
   res.sendfile(__dirname + '/moderate.html');
 });
-/*
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : ''
+
+
+io.sockets.on('connection', function(socket){
+	socket.on('send message', function(data){
+		io.sockets.emit('new message', data);//iedereen kan het zien(ook ik)
+		//socket.broadcast.emit('new message', data);//iedereen kan het zien(behalve ik)
+	});
 });
-
-connection.connect();
-
-connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
-
-  console.log('The solution is: ', rows[0].solution);
-});
-
-connection.end();
-*/
-module.exports = app;
