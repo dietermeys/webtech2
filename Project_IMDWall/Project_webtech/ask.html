@@ -13,6 +13,7 @@
 		width: 500px;
 		margin: auto;
 		font-size: 1.6em;
+		border: 1px solid black;
 	}
 	#send-question{
 		float: left;
@@ -20,6 +21,9 @@
 	#contentWrap{
 		display: none;
 	}
+	#users{
+		float:left;
+			}
 	</style>
 </head>
 <body>
@@ -49,7 +53,8 @@
 		var socket = io.connect();
 		var $nickForm = $('#setNick');
 		var $nickError = $('#nickError');
-		var $nickBox = $('#nickname')
+		var $nickBox = $('#nickname');
+		var $users = $('#users');
 		var $messageForm = $('#send-question');
 		var $messageBox = $('#question');
 		var $ask = $('.questions');
@@ -73,9 +78,19 @@
 			$messageBox.val('');
 		});
 
-		socket.on('new message', function(data){
-			$ask.append(data + "<br />");
+		socket.on('usernames', function(data){
+			var html = '';
+			for(i=0; i < data.length; i++){
+				html += data[i] + '<br />';
+			}
+			$users.html(html);
 		});
+
+		socket.on('new message', function(data){
+			$ask.append('<b>' + data.nick + ': </b>'  + data.msg + "<br />");
+		});
+
+
 	});
 	</script>
 </body>

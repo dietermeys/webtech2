@@ -28,11 +28,22 @@ io.sockets.on('connection', function(socket){
 			callback(true);
 			socket.nickname = data;
 			nicknames.push(socket.nickname);
-			io.sockets.emit('usernames', nicknames);
+			updateNicknames();
 		}
 	});
+
+	function updateNicknames(){
+		io.sockets.emit('usernames', nicknames);
+	}
 	socket.on('send message', function(data){
-		io.sockets.emit('new message', data);//iedereen kan het zien(ook ik)
+		io.sockets.emit('new message', {msg: data, nick: socket.nickname});//iedereen kan het zien(ook ik)
 		//socket.broadcast.emit('new message', data);//iedereen kan het zien(behalve ik)
+	});
+
+	socket.on('disconnect', function(data){
+		if(!socket.nickname) return;
+		nicknames.splice(nicknames.indexOf(socket.nickname), 1);
+		updateNicknames();
+			
 	});
 });
