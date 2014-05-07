@@ -5,8 +5,27 @@
 	<title>List</title>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<style>
+	.questions{
+		height: 500px;
+		font-size: 1.6em;
+	}
+	</style>
 </head>
 <body>
 	<h1>Lijst met vragen</h1>
+	<div class="questions"></div>
+
+	<script>
+	jQuery(function($){
+		var socket = io.connect();
+		var $ask = $('.questions');
+
+		socket.on('new message', function(data){
+			$ask.append(data + "<br />");
+		});
+	});
+	</script>
+
 </body>
 </html>
