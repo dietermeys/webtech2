@@ -5,28 +5,67 @@
 	<!--<link rel="stylesheet" type="text/css" href="reset.css">
 	<link rel="stylesheet" type="text/css" href="css.css"> -->
 	<title>IMDWall</title>
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<style>
-	#questions{
-		height: 500px;
+	.questions{
+		min-height: 500px;
+		width: 500px;
+		margin: auto;
+		font-size: 1.6em;
+	}
+	#send-question{
+		float: left;
+	}
+	#contentWrap{
+		display: none;
 	}
 	</style>
 </head>
 <body>
-	<div id="questions"></div>
+<h1>Stel uw vraag</h1>
 
-	<form id="send-question">
-		<input type="text" size="35" id="question">
-		<input type="submit" value="ask"></input>
-	</form>
+	<div id="nickWrap">
+		<p>Enter a username:</p>
+		<p id="nickError"></p>
+		<form action="" id="setNick">
+			<input type="text" id="nickname">
+			<input type="submit"></input>
+		</form>
+	</div>
 
+	<div id="contentWrap">
+		<div id="chatWrap">
+			<div class="questions"></div>
+			<form id="send-question">
+				<input type="text" size="35" id="question">
+				<input type="submit" value="ask"></input>
+			</form>
+		</div>
+		<div id="users"></div>
+	</div>
 	<script>
 	jQuery(function($){
 		var socket = io.connect();
+		var $nickForm = $('#setNick');
+		var $nickError = $('#nickError');
+		var $nickBox = $('#nickname')
 		var $messageForm = $('#send-question');
 		var $messageBox = $('#question');
-		var $ask = $('#questions');
+		var $ask = $('.questions');
+
+		$nickForm.submit(function(e){
+			e.preventDefault();
+			socket.emit('new user', $nickBox.val(), function(data){
+				if(data){
+					$('#nickWrap').hide();
+					$('#contentWrap').show();
+				} else{
+					$nickError.html('Username is already taken! Try again.')
+				}
+			});
+			$nickBox.val('');
+		});
 
 		$messageForm.submit(function(e){
 			e.preventDefault();
