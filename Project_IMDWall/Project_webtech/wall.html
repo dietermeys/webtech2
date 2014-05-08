@@ -23,9 +23,20 @@
 		var $nickBox = $('#nickname');
 		var $users = $('#users');
 
-		socket.on('new message', function(data){
-			$ask.append('<b>' + data.nick + ': </b>'  + data.msg + "<br />");
+//ouder berichten weergeven
+		socket.on('load old msgs', function(docs){
+			for(var i=docs.length-1; i< i >= 0; i--){
+				displayQuestion(docs[i]);
+			}
 		});
+
+		socket.on('new message', function(data){
+			displayQuestion(data);
+		});
+
+		function displayQuestion(data){
+			$ask.append('<b>' + data.nick + ': </b>'  + data.msg + "<br />");
+		}
 	});
 	</script>
 
