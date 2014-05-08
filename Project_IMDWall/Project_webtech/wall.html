@@ -20,9 +20,11 @@
 	jQuery(function($){
 		var socket = io.connect();
 		var $ask = $('.questions');
+		var $nickBox = $('#nickname');
+		var $users = $('#users');
 
 		socket.on('new message', function(data){
-			$ask.append(data + "<br />");
+			$ask.append('<b>' + data.nick + ': </b>'  + data.msg + "<br />");
 		});
 	});
 	</script>
