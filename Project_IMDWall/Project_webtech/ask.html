@@ -72,23 +72,35 @@
 			$nickBox.val('');
 		});
 
+		socket.on('usernames', function(data){
+			var html = '';
+			for(var i=0; i < data.length; i++){
+				html += data[i] + '<br />';
+			}
+			$users.html(html);
+		});
+
 		$messageForm.submit(function(e){
 			e.preventDefault();
 			socket.emit('send message', $messageBox.val());
 			$messageBox.val('');
 		});
 
-		socket.on('usernames', function(data){
-			var html = '';
-			for(i=0; i < data.length; i++){
-				html += data[i] + '<br />';
+		socket.on('load old msgs', function(docs){
+			for(var i=docs.length-1; i< i >= 0; i--){
+				displayQuestion(docs[i]);
 			}
-			$users.html(html);
 		});
 
+
+
 		socket.on('new message', function(data){
-			$ask.append('<b>' + data.nick + ': </b>'  + data.msg + "<br />");
+			displayQuestion(data);
 		});
+
+		function displayQuestion(data){
+			$ask.append('<b>' + data.nick + ': </b>'  + data.msg + "<br />");
+		}
 
 
 	});
