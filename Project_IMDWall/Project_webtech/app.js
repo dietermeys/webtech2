@@ -10,6 +10,7 @@ server.listen(3000);
 mongoose.connect('mongodb://localhost/wall', function(err){
 	if(err){
 		console.log(err);
+		console.log('mislukt');
 	}
 	else{
 		console.log('Connected');
@@ -39,6 +40,12 @@ app.get('/moderate.html', function (req, res) {
 
 
 io.sockets.on('connection', function(socket){
+
+	var query = Question.find({});					//limiet zetten
+	query.sort('-created').limit(8).exec(function(err, docs){		//exec laat het werken
+		if(err) throw err;
+		socket.emit('load old msgs', docs);
+	});
 	socket.on('new user', function(data, callback){
 		if (nicknames.indexOf(data) != -1){
 			callback(false);
