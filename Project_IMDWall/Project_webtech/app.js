@@ -2,9 +2,27 @@ var express = require('express'),
 	app = express(),
 	server = require('http').createServer(app),
 	io = require('socket.io').listen(server),
+	mongoose = require('mongoose'),
 	nicknames = [];
 
 server.listen(3000);
+
+mongoose.connect('mongodb://localhost/wall', function(err){
+	if(err){
+		console.log(err);
+	}
+	else{
+		console.log('Connected');
+	}
+});
+
+var wallSchema = mongoose.Schema({
+	nick: String,
+	msg: String,
+	created: {type: Date, default: Date.now}
+});
+
+var Question = mongoose.model('Question', wallSchema);
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/ask.html');
@@ -36,6 +54,10 @@ io.sockets.on('connection', function(socket){
 		io.sockets.emit('usernames', nicknames);
 	}
 	socket.on('send message', function(data){
+		var newMsg = new Question({msg: data, nick: socket.nickname});//document aanmaken
+		newMsg.save(function(err){ //save
+			if(err) throw  err;
+		});
 		io.sockets.emit('new message', {msg: data, nick: socket.nickname});//iedereen kan het zien(ook ik)
 		//socket.broadcast.emit('new message', data);//iedereen kan het zien(behalve ik)
 	});
