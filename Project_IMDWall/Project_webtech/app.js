@@ -18,8 +18,10 @@ mongoose.connect('mongodb://localhost/wall', function(err){
 });
 
 var wallSchema = mongoose.Schema({
+	id: Number,
 	nick: String,
 	msg: String,
+	like: {type: Number, default: "0"},
 	created: {type: Date, default: Date.now}
 });
 
@@ -41,11 +43,13 @@ app.get('/moderate.html', function (req, res) {
 
 io.sockets.on('connection', function(socket){
 
-	var query = Question.find({});					//limiet zetten
-	query.sort('-created').limit(8).exec(function(err, docs){		//exec laat het werken
+	var query = Question.find({});
+	query.sort('-created').exec(function(err, docs){		//exec laat het werken
 		if(err) throw err;
 		socket.emit('load old msgs', docs);
 	});
+
+
 	socket.on('new user', function(data, callback){
 		if (nicknames.indexOf(data) != -1){
 			callback(false);
@@ -57,22 +61,25 @@ io.sockets.on('connection', function(socket){
 		}
 	});
 
+
 	function updateNicknames(){
 		io.sockets.emit('usernames', nicknames);
 	}
+
 	socket.on('send message', function(data){
 		var newMsg = new Question({msg: data, nick: socket.nickname});//document aanmaken
 		newMsg.save(function(err){ //save
 			if(err) throw  err;
 		});
 		io.sockets.emit('new message', {msg: data, nick: socket.nickname});//iedereen kan het zien(ook ik)
-		//socket.broadcast.emit('new message', data);//iedereen kan het zien(behalve ik)
+		//socket.broadcast.emit('new message', {msg: data, nick: socket.nickname});
 	});
 
 	socket.on('disconnect', function(data){
 		if(!socket.nickname) return;
 		nicknames.splice(nicknames.indexOf(socket.nickname), 1);
-		updateNicknames();
-			
+		updateNicknames();	
 	});
+
+
 });
