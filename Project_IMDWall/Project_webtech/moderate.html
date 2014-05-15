@@ -2,11 +2,89 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Moderate</title>
+	<title>Moderate pagina</title>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<style>
+body{
+		font-family: 'Varela Round', sans-serif;
+		background-color: #2ecc71;
+		color: white;
+		margin: 0 auto;
+	}
+	.questions{
+		min-height: 500px;
+		width: 800px;
+		margin: auto;
+		font-size: 1.6em;
+	}
+	header{
+	width: 100%;
+	height: 200px;
+	background-color: #1abf9f;
+	}
+	#links{
+	float: left;
+	}
+	#rechts{
+		float: right;
+		height: 180px;
+		width: 320px;
+	}
+	header h1{
+		text-align: center;
+		padding-top: 50px;
+		font-size: 3em;
+	}
+	h1{
+		text-align: center;
+	}
+	#vraag{
+		background-color: #27ae60;
+		border-radius: 2px;
+		padding-top: 5px;
+		padding-left: 5px;
+		padding-bottom: 5px;
+	}
+	</style>
 </head>
 <body>
-	<h1>Moderate pagina</h1>
+	<header>
+		<img id="links" src="http://weareimd.be/theme/weareimd//assets/images/logo.svg" alt="weareimdlogo">
+		<img id="rechts" src="http://weareimd.be/theme/weareimd//assets/images/pixelman.png" alt="imdlogo">
+		<h1>IMD Question Wall</h1>
+	</header>
+	<h1>Admin pagina</h1>
+	<div class="questions"></div>
+
+	<script>
+	jQuery(function($){
+		var socket = io.connect();
+		var $ask = $('.questions');
+		var $nickBox = $('#nickname');
+		var $users = $('#users');
+
+//ouder berichten weergeven
+		socket.on('load old msgs', function(docs){
+			for(var i=docs.length-1; i< i >= 0; i--){
+				displayQuestion(docs[i]);
+			}
+		});
+
+		socket.on('new message', function(data){
+			displayQuestion(data);
+		});
+
+		function displayQuestion(data){
+			$ask.append('<div id="vraag"><span class="msg"><b>' + data.nick + ': </b>'  + data.msg + "</span></div><br />");
+		}
+
+	});
+	$('.questions').on('click', '.msg', function(e){
+		e.preventDefault();
+		$(this).remove();
+	});
+	</script>
+
 </body>
 </html>
